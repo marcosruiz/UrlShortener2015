@@ -3,3 +3,7 @@
 /.settings/
 /.gradle/
 /build/
+
+#IDEs
+.idea/
+*.iml
