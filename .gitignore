@@ -2,8 +2,11 @@
 /.project
 /.settings/
 /.gradle/
-/build/
+/**/build
 
 #IDEs
 .idea/
 *.iml
+
+#vim
+*.swp
