@@ -1,5 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
+install:
+  - gradle eerie-black:assemble
 script:
   - gradle eerie-black:build
