@@ -27,7 +27,7 @@ dependencies {
     runtime 'org.hsqldb:hsqldb'
 
     // Scala compiler
-    compile 'org.scala-lang:scala-library:2.10.2'
+    compile 'org.scala-lang:scala-library:2.11.7'
 
     // Provides java script libraries for static content
     compile 'org.webjars:bootstrap:3.3.5'
