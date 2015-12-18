@@ -17,6 +17,10 @@ import java.sql.Date;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+//Imports oriented to determinate if an estipulated URI is reachable
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 @RestController
 public class UrlShortenerControllerWithLogs extends UrlShortenerController {
 
@@ -34,6 +38,25 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
 			@RequestParam(value = "sponsor", required = false) String sponsor,
 			@RequestParam(value = "brand", required = false) String brand, HttpServletRequest request) {
 		logger.info("Requested new short for uri " + url);
+		
+		//We test if the URI is reachable
+		int myResponseCode = 0;
+		try {
+			URL urlTest = new URL(url);
+			HttpURLConnection http = (HttpURLConnection)urlTest.openConnection();
+			myResponseCode = http.getResponseCode();
+			if(200 <= myResponseCode && 300 > myResponseCode ){
+				logger.info("The response code for the uri " + url + "its: " + myResponseCode + " REACHABLE");
+			}else{
+				logger.info("The response code for the uri " + url + "its: " + myResponseCode + " NOT REACHABLE");
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception e) {
+			logger.info("The response code for the uri " + url + "its: " + myResponseCode + " NOT REACHABLE");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		
 		return super.shortener(url, sponsor, brand, request);
 	}
 
@@ -68,4 +91,5 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
 			return null;
 		}
 	}
+	
 }
