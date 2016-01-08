@@ -28,4 +28,10 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
 		logger.info("Requested new short for uri " + url);
 		return super.shortener(url, sponsor, brand, request);
 	}
+
+	@RequestMapping(value = "/ad-redirect", method = RequestMethod.GET)
+	public String redirectTo(@PathVariable String id, HttpServletRequest request) {
+		logger.info("Requested redirection with hash " + id);
+		return super.redirectTo(id, request);
+	}
 }
