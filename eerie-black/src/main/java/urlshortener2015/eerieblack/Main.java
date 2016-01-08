@@ -1,6 +1,7 @@
 package urlshortener2015.eerieblack;
 
 import org.springframework.boot.SpringApplication;
+import urlshortener2015.eerieblack.services.RegistrationServer;
 import urlshortener2015.eerieblack.services.WebServer;
 
 public class Main {
@@ -31,12 +32,16 @@ public class Main {
         System.out.println("Usage: java -jar eerie-black.jar <service-name> [<port>]");
         System.out.println("where <port> is > 1024 and <service-name> is one of the following:");
         System.out.printf("  \'%s\'%n", WEB_SERVICE);
-        // System.out.printf("  \'%s\'%n", REGISTRATION_SERVICE);
+        System.out.printf("  \'%s\'%n", REGISTRATION_SERVICE);
     }
 
     private static void launchService(String serviceName, String[] args) {
         if (serviceName.equals(WEB_SERVICE)) {
+            System.setProperty("spring.profiles.active", "web"); // Set profile to 'web'
             SpringApplication.run(WebServer.class, args);
+        } else if (serviceName.equals(REGISTRATION_SERVICE)) {
+            System.setProperty("spring.profiles.active", "registration"); // Set profile to 'registration'
+            SpringApplication.run(RegistrationServer.class, args);
         }
     }
 }

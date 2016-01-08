@@ -1,0 +1,19 @@
+# Properties file for Discovery Server
+# This file will only be active when the profile 'registration' is active
+
+# Configure Discovery Server
+eureka:
+    instance:
+        hostname: localhost
+    client: # Not a client, so don't register yourself!
+        registerWithEureka: false
+        fetchRegistry: false
+
+server:
+    port: 8081  # HTTP (Tomcat) port
+
+# Discovery Server Dashboard uses FreeMarker. Don't want Thymeleaf templates
+# TODO: Maybe we should use no dashboard or a custom one
+spring:
+    thymeleaf:
+        enabled: false  # Disable Thymeleaf
