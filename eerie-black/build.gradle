@@ -18,7 +18,8 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'spring-boot'
 // apply plugin: 'scala'
 
-mainClassName = 'urlshortener2015.eerieblack.Application'
+//mainClassName = 'urlshortener2015.eerieblack.services.WebServer'
+mainClassName = 'urlshortener2015.eerieblack.Main'
 
 dependencies {
     compile project(':common')
