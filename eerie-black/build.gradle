@@ -26,9 +26,9 @@ dependencies {
     runtime 'org.hsqldb:hsqldb'
 
     // Spring cloud library
-    // compile "org.springframework.boot:spring-boot-starter-web"
-    // compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    // compile "org.springframework.cloud:spring-cloud-starter-eureka:1.0.4.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.cloud:spring-cloud-starter-eureka:1.0.4.RELEASE"
     compile "org.springframework.cloud:spring-cloud-starter-eureka-server:1.0.4.RELEASE"
 
     // Provides java script libraries for static content

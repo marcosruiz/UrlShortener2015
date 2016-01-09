@@ -1,10 +1,9 @@
-package urlshortener2015.eerieblack.services.web;
+package urlshortener2015.eerieblack.services.bckp.web;
 
 import com.google.common.hash.Hashing;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
-import urlshortener2015.eerieblack.services.shortener.ShortenerServiceWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.HttpURLConnection;
@@ -25,28 +23,16 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @Profile("web")
-@ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener" }) // Añadir la ruta de todos los wrappers
+@ComponentScan(basePackages = { "urlshortener2015.common.repository" })
 public class UrlShortenerControllerWithLogs extends UrlShortenerController {
-
-    @Autowired
-    ShortenerServiceWrapper shortenerServiceWrapper;
 
 	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerControllerWithLogs.class);
 
-    // public UrlShortenerControllerWithLogs(ShortenerService shortenerService) {
-    //     super();
-    //     this.shortenerService = shortenerService;
-    // }
-
-    @Override
+	@Override
 	@RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
 	public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
 		logger.info("Requested redirection with hash " + id);
-        // Get url from shortenerService instead of own database
-        ShortURL url = shortenerServiceWrapper.getByHash(id);
-        logger.info("Url retrieved: " + url);
-        if (url != null) return createSuccessfulRedirectToResponse(url);
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return super.redirectTo(id, request);
 	}
 
 	@Override

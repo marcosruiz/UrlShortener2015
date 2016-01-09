@@ -1,9 +1,5 @@
 # Spring properties
 spring:
-
-  application:
-    name: web-service
-
   # Spring Datasource JDBC
   datasource:
     platform: hsqldb
@@ -16,12 +12,3 @@ spring:
   view:
     prefix: resources/static
     suffix: html
-
-# Discovery Server Access
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8081/eureka/
-
-server:
-  port: 8080
