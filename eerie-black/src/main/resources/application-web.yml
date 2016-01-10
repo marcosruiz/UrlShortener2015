@@ -1,0 +1,27 @@
+# Spring properties
+spring:
+
+  application:
+    name: web-service
+
+  # Spring Datasource JDBC
+  datasource:
+    platform: hsqldb
+    url: jdbc:hsqldb:mem:.
+    username: sa
+    password:
+    driverClassName: org.hsqldb.jdbcDriver
+
+  # View Resolver
+  view:
+    prefix: resources/static
+    suffix: html
+
+# Discovery Server Access
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+
+server:
+  port: 8080
