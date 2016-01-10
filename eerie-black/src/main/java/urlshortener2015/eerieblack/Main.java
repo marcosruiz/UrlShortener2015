@@ -36,8 +36,8 @@ public class Main {
         System.out.println("Usage: java -jar eerie-black.jar <service-name> [<port>]");
         System.out.println("where <port> is > 1024 and <service-name> is one of the following:");
         System.out.printf("  · %s - Discovery server%n", REGISTRATION_SERVICE);
-        System.out.printf("  · %s - Web server that serves the frontend%n", WEB_SERVICE);
-        System.out.printf("  · %s - Url shortener microservice%n", SHORTENER_SERVICE);
+        System.out.printf("  · %s - Web server that serves the frontend and the API%n", WEB_SERVICE);
+        System.out.printf("  · %s - Url shortener microservice which actually stores the URIs%n", SHORTENER_SERVICE);
     }
 
     private static void launchService(String serviceName, String[] args) {

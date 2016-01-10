@@ -11,6 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class ShortenerServer extends SpringBootServletInitializer {
 
     // Load spring boot application on main
+    // Main is never called
     public static void main(String[] args) throws Exception {
         System.setProperty("spring.profiles.active", "registration"); // Set profile to 'registration'
         SpringApplication.run(ShortenerServer.class, args);

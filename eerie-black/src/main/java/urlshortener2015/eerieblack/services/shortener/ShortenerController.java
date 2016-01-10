@@ -50,14 +50,14 @@ public class ShortenerController extends UrlShortenerController {
             HttpURLConnection http = (HttpURLConnection)urlTest.openConnection();
             myResponseCode = http.getResponseCode();
             if(200 <= myResponseCode && 300 > myResponseCode ){
-                logger.info("The response code for the uri " + url + "is: " + myResponseCode + " REACHABLE");
+                logger.info("The response code for the uri " + url + " is " + myResponseCode + " REACHABLE");
                 return super.shortener(url, sponsor, brand, request);
             }else{
-                logger.info("The response code for the uri " + url + "is: " + myResponseCode + " NOT REACHABLE");
+                logger.info("The response code for the uri " + url + " is " + myResponseCode + " NOT REACHABLE");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            logger.info("The response code for the uri " + url + "is: " + myResponseCode + " NOT REACHABLE");
+            logger.info("The response code for the uri " + url + " is " + myResponseCode + " NOT REACHABLE");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -69,7 +69,7 @@ public class ShortenerController extends UrlShortenerController {
                                             String brand, String owner, String ip) {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
         if (urlValidator.isValid(url)) {
-            if(brand.equals("")){
+            if(brand == null || brand.equals("")){
                 brand = Hashing.murmur3_32()
                         .hashString(url, StandardCharsets.UTF_8).toString();
             }

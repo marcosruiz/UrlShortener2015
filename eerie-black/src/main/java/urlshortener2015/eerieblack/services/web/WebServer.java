@@ -22,15 +22,4 @@ public class WebServer extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(WebServer.class);
 	}
-
-	// @Bean
-	// public ShortenerService shortenerService() {
-	// 	return new ShortenerService("http://shortener-service");
-	// }
-
-	// @Bean
-	// public UrlShortenerControllerWithLogs urlShortenerControllerWithLogs() {
-	// 	return new UrlShortenerControllerWithLogs(shortenerService());
-	// }
-
 }
