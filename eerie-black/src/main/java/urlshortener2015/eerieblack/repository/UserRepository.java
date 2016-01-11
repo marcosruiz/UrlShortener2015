@@ -10,5 +10,4 @@ public interface UserRepository {
     User delete(User user);
     List<User> list(Long limit, Long offset);
     User validate(User user);
-    boolean isPremium(String name);
 }

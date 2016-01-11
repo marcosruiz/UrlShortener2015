@@ -113,18 +113,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Override
-    public boolean isPremium(String name) {
-        try {
-            User user = jdbc.queryForObject("SELECT * FROM users WHERE username=?",
-                    rowMapper, name);
-            return user.isPremium();
-        } catch (Exception e) {
-            log.debug("When select for user " + name, e);
-            return false;
-        }
-    }
-
     /* ENCRYPT HELPER */
     private byte[] encrypt(String original) throws UnsupportedEncodingException {
         byte[] messageBytes = original.getBytes("UTF-8");
