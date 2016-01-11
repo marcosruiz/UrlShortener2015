@@ -27,7 +27,6 @@ public class UserRepositoryImpl implements UserRepository {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new User(rs.getString("username"), null, rs.getBoolean("premium"));
-            // return new User(rs.getString("username"), rs.getString("password"), rs.getBoolean("premium"));
         }
     };
 
@@ -81,7 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User delete(User user) {
         try {
-            jdbc.update("delete from users where hash=?", user.getUsername());
+            jdbc.update("delete from users where username=?", user.getUsername());
         } catch (Exception e) {
             log.debug("When delete for user " + user.getUsername(), e);
             return null;
