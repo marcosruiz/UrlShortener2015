@@ -1,4 +1,4 @@
-package urlshortener2015.eerieblack.config;
+package urlshortener2015.eerieblack.services.shortener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,19 +13,18 @@ import urlshortener2015.eerieblack.repository.UserRepository;
 import urlshortener2015.eerieblack.repository.UserRepositoryImpl;
 
 @Configuration
+@Profile("shortener")
 public class PersistenceContext {
 
 	@Autowired
 	protected JdbcTemplate jdbc;
 
 	@Bean
-	@Profile("shortener")
 	ShortURLRepository shortURLRepository() {
 		return new ShortURLRepositoryImpl(jdbc);
 	}
 
 	@Bean
-	@Profile("shortener")
 	ClickRepository clickRepository() {
 		return new ClickRepositoryImpl(jdbc);
 	}
