@@ -1,0 +1,25 @@
+# Properties file for Users service
+# This file will only be active when profile 'users' is active
+
+# Spring properties
+spring:
+  application:
+    name: users-service
+
+  # Spring Datasource JDBC
+  datasource:
+    platform: hsqldb
+    url: jdbc:hsqldb:mem:.
+    username: sa
+    password:
+    driverClassName: org.hsqldb.jdbcDriver
+
+# Discovery Server Access
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+
+# HTTP Server
+server:
+  port: 8083

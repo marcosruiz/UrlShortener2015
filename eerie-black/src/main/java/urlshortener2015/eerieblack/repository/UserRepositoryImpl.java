@@ -49,6 +49,16 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
+    public User findByName(String name) {
+        try {
+            return jdbc.queryForObject("SELECT * FROM users WHERE username=?", rowMapper, name);
+        } catch (Exception e) {
+            log.debug("When select for user " + name, e);
+            return null;
+        }
+    }
+
+    @Override
     public User save(User user) {
         try {
             jdbc.update("INSERT INTO users VALUES (?,?,?)",
@@ -67,8 +77,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(User user) {
         try {
-            jdbc.update("update users set password=?, premium=? where username=?",
-                    user.getUsername(), encrypt(user.getPassword()), user.isPremium());
+            log.debug("Updating user " + user.getUsername());
+            if (user.getPassword() != null) {
+                jdbc.update("update users set password=? where username=?",
+                        encrypt(user.getPassword()), user.getUsername());
+            } else {
+                jdbc.update("update users set premium=? where username=?",
+                        user.isPremium(), user.getUsername());
+            }
             user = new User(user.getUsername(), null, user.isPremium());
 		} catch (Exception e) {
 			log.debug("When update for user " + user.getUsername(), e);
@@ -105,6 +121,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User validate(User user) {
         try {
+            if (user.getUsername() ==null || user.getPassword() == null) return null;
             return jdbc.queryForObject("SELECT * FROM users WHERE username=? AND password=?",
                     rowMapper, user.getUsername(), encrypt(user.getPassword()));
         } catch (Exception e) {
