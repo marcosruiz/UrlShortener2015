@@ -8,10 +8,9 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer
 public class RegistrationServer {
 
-    // Main is never used since there is another main that will be called
+    // Set profile to "registration" and load Spring Boot Application
     public static void main(String[] args) {
-        // Tell server to look for application-registration.yml
-        // System.setProperty("spring.config.name", "registration-server");
+        System.setProperty("spring.profiles.active", "registration");
         SpringApplication.run(RegistrationServer.class, args);
     }
 }

@@ -1,3 +1,6 @@
+# Properties file for the Web Server
+# This file will only be active when profile 'web' is active
+
 # Spring properties
 spring:
 

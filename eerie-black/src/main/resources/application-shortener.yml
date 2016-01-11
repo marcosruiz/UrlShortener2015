@@ -1,3 +1,6 @@
+# Properties file for Shortener service
+# This file will only be active when profile 'shortener' is active
+
 # Spring properties
 spring:
   application:
@@ -10,11 +13,6 @@ spring:
     username: sa
     password:
     driverClassName: org.hsqldb.jdbcDriver
-
-  # View Resolver
-  view:
-    prefix: resources/static
-    suffix: html
 
 # Discovery Server Access
 eureka:
