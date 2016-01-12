@@ -27,7 +27,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RestController
 @Profile("web")
 @ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener" }) // Añadir la ruta de todos los wrappers
-public class UrlShortenerControllerWithLogs extends UrlShortenerController {
+public class UrlShortenerWebController extends UrlShortenerController {
 
     // JSON Web Token signing
     private static String KEY_SECRET = "super-secure-s3cr3t"; // FIXME OMG
@@ -38,7 +38,7 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
     @Autowired
     ShortenerServiceWrapper shortenerServiceWrapper;
 
-	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerControllerWithLogs.class);
+	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerWebController.class);
 
     @Override
 	@RequestMapping(value = "/{id:(?!link|index|ad-redirect).*}", method = RequestMethod.GET)
@@ -105,7 +105,7 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
                 orig.getHash(),
                 orig.getTarget(),
                 linkTo(
-                        methodOn(UrlShortenerControllerWithLogs.class)
+                        methodOn(UrlShortenerWebController.class)
                                 .redirectTo(orig.getHash(), null)
                 ).toUri(),
                 orig.getSponsor(),
@@ -125,7 +125,7 @@ public class UrlShortenerControllerWithLogs extends UrlShortenerController {
                 orig.getHash(),
                 "/ad-redirect.html?id=" + orig.getHash(),
                 linkTo(
-                        methodOn(UrlShortenerControllerWithLogs.class)
+                        methodOn(UrlShortenerWebController.class)
                                 .redirectTo(orig.getHash(), null)
                 ).toUri(),
                 orig.getSponsor(),
