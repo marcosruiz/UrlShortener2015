@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
+import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.services.shortener.ShortenerServiceWrapper;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -48,7 +50,7 @@ public class UrlShortenerWebController extends UrlShortenerController {
         ShortURL shortURL = shortenerServiceWrapper.getByHash(id);
         if (shortURL != null) {
             // If url has advertisement, change the target uri to our advertisement page
-            if (true /* url has advertisement */) shortURL = interceptURIAndTarget(shortURL); //FIXME OBVIOUSLY
+            if (shortURL.getSponsor().equals("yes")) shortURL = interceptURIAndTarget(shortURL);
             return createSuccessfulRedirectToResponse(shortURL);
         }
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,7 +61,22 @@ public class UrlShortenerWebController extends UrlShortenerController {
 			@RequestParam(value = "sponsor", required = false) String sponsor,
 			@RequestParam(value = "brand", required = false) String brand, HttpServletRequest request) {
 		logger.info("Requested new short for uri " + url);
-		ShortURL shortURL = shortenerServiceWrapper.postNewURL(url, sponsor, brand);
+
+        // Get the token from request
+        String token = AuthTokenManager.extractAuthToken(request);
+        if (token == null && sponsor != null && sponsor.equals("no")) {
+            logger.info("Auth fail: No token found");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Validate the token
+        User user = AuthTokenManager.validateAuthToken(token);
+        if ((user == null || !user.isPremium()) && sponsor != null && sponsor.equals("no")) {
+            logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+		ShortURL shortURL = shortenerServiceWrapper.postNewURL(url, sponsor, brand, token);
 		if (shortURL != null) {
             shortURL = interceptURI(shortURL);
 			HttpHeaders h = new HttpHeaders();

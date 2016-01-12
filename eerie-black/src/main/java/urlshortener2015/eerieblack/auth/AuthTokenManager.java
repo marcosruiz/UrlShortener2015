@@ -48,6 +48,7 @@ public class AuthTokenManager {
     /** Validates JWT to access a protected endpoint and returns user info */
     public static User validateAuthToken(String token) {
         try {
+            if (token == null) return null;
             Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
             return new User(claims.get("username", String.class), null, claims.get("premium", Boolean.class));
         } catch (ExpiredJwtException e) {

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
+import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.HttpURLConnection;
@@ -43,6 +45,20 @@ public class ShortenerController extends UrlShortenerController {
                                               HttpServletRequest request) {
         logger.info("Requested new short for uri " + url);
 
+        // Get the token from request
+        String token = AuthTokenManager.extractAuthToken(request);
+        if (token == null && sponsor != null && sponsor.equals("no")) {
+            logger.info("Auth fail: No token found");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // Validate the token
+        User user = AuthTokenManager.validateAuthToken(token);
+        if ((user == null || !user.isPremium()) && sponsor != null && sponsor.equals("no")) {
+            logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         //We test if the URI is reachable
         int myResponseCode = 0;
         try {
@@ -67,6 +83,7 @@ public class ShortenerController extends UrlShortenerController {
     @Override
     protected ShortURL createAndSaveIfValid(String url, String sponsor,
                                             String brand, String owner, String ip) {
+        if (sponsor == null || sponsor.equals("")) sponsor = "yes";
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
         if (urlValidator.isValid(url)) {
             if(brand == null || brand.equals("")){
