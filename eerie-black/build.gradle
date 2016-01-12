@@ -25,6 +25,9 @@ dependencies {
     // Provides the production database
     runtime 'org.hsqldb:hsqldb'
 
+    // A simple library for handling JSON Web Tokens
+    compile 'io.jsonwebtoken:jjwt:0.6.0'
+
     // Spring cloud library
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"

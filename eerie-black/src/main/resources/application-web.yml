@@ -1,3 +1,6 @@
+# Properties file for the Web Server
+# This file will only be active when profile 'web' is active
+
 # Spring properties
 spring:
 
@@ -5,17 +8,17 @@ spring:
     name: web-service
 
   # Spring Datasource JDBC
-  datasource:
-    platform: hsqldb
-    url: jdbc:hsqldb:mem:.
-    username: sa
-    password:
-    driverClassName: org.hsqldb.jdbcDriver
+  #datasource:
+  #  platform: hsqldb
+  #  url: jdbc:hsqldb:mem:.
+  #  username: sa
+  #  password:
+  #  driverClassName: org.hsqldb.jdbcDriver
 
   # View Resolver
   view:
-    prefix: resources/static
-    suffix: html
+    prefix: /resources/static
+    suffix: .html
 
 # Discovery Server Access
 eureka:
