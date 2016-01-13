@@ -11,8 +11,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 // @ ComponentScan(useDefaultFilters = false)
 public class WebServer extends SpringBootServletInitializer {
 
-    // Load spring boot application on main (never used)
-	public static void main(String[] args) throws Exception {
+	// Set profile to "web" and load Spring Boot Application
+	public static void main(String[] args) {
 		System.setProperty("spring.profiles.active", "web");
 		SpringApplication.run(WebServer.class, args);
 	}

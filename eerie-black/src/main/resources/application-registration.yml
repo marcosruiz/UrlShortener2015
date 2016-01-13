@@ -1,5 +1,5 @@
 # Properties file for Discovery Server
-# This file will only be active when the profile 'registration' is active
+# This file will only be active when profile 'registration' is active
 
 # Configure Discovery Server
 eureka:
@@ -13,7 +13,6 @@ server:
     port: 8081  # HTTP (Tomcat) port
 
 # Discovery Server Dashboard uses FreeMarker. Don't want Thymeleaf templates
-# TODO: Maybe we should use no dashboard or a custom one
 spring:
     thymeleaf:
         enabled: false  # Disable Thymeleaf

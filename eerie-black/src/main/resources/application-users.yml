@@ -1,10 +1,10 @@
-# Properties file for Shortener service
-# This file will only be active when profile 'shortener' is active
+# Properties file for Users service
+# This file will only be active when profile 'users' is active
 
 # Spring properties
 spring:
   application:
-    name: shortener-service
+    name: users-service
 
   # Spring Datasource JDBC
   datasource:
@@ -22,4 +22,4 @@ eureka:
 
 # HTTP Server
 server:
-  port: 8082
+  port: 8083

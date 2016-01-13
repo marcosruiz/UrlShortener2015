@@ -1,8 +1,8 @@
 package urlshortener2015.eerieblack;
 
-import org.springframework.boot.SpringApplication;
 import urlshortener2015.eerieblack.services.registration.RegistrationServer;
 import urlshortener2015.eerieblack.services.shortener.ShortenerServer;
+import urlshortener2015.eerieblack.services.users.UsersServer;
 import urlshortener2015.eerieblack.services.web.WebServer;
 
 public class Main {
@@ -10,8 +10,9 @@ public class Main {
     final static String WEB_SERVICE = "web";
     final static String REGISTRATION_SERVICE = "registration";
     final static String SHORTENER_SERVICE = "shortener";
+    final static String USERS_SERVICE = "users";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         int argsCount = checkArgs(args);
 
@@ -28,6 +29,7 @@ public class Main {
                 args[0].equals(WEB_SERVICE)
                 || args[0].equals(REGISTRATION_SERVICE)
                 || args[0].equals(SHORTENER_SERVICE)
+                || args[0].equals(USERS_SERVICE)
         )) return args.length;
         else return  -1;
     }
@@ -38,18 +40,15 @@ public class Main {
         System.out.printf("  · %s - Discovery server%n", REGISTRATION_SERVICE);
         System.out.printf("  · %s - Web server that serves the frontend and the API%n", WEB_SERVICE);
         System.out.printf("  · %s - Url shortener microservice which actually stores the URIs%n", SHORTENER_SERVICE);
+        System.out.printf("  · %s - User management microservice%n", USERS_SERVICE);
     }
 
-    private static void launchService(String serviceName, String[] args) {
-        if (serviceName.equals(WEB_SERVICE)) {
-            System.setProperty("spring.profiles.active", "web"); // Set profile to 'web'
-            SpringApplication.run(WebServer.class, args);
-        } else if (serviceName.equals(REGISTRATION_SERVICE)) {
-            System.setProperty("spring.profiles.active", "registration"); // Set profile to 'registration'
-            SpringApplication.run(RegistrationServer.class, args);
-        } else if (serviceName.equals(SHORTENER_SERVICE)) {
-            System.setProperty("spring.profiles.active", "shortener"); // Set profile to 'registration'
-            SpringApplication.run(ShortenerServer.class, args);
+    private static void launchService(String serviceName, String[] args) throws Exception {
+        switch (serviceName) {
+            case WEB_SERVICE: WebServer.main(args); break; //Execute WebServer's main
+            case REGISTRATION_SERVICE: RegistrationServer.main(args); break; //Execute RegistrationServer's main
+            case SHORTENER_SERVICE: ShortenerServer.main(args); break; //Execute ShortenerServer's main
+            case USERS_SERVICE: UsersServer.main(args); break; //Execute UsersServer's main
         }
     }
 }
