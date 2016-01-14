@@ -31,7 +31,7 @@ public class ShortenerServer extends SpringBootServletInitializer{
         System.setProperty("spring.profiles.active", "shortener");
         SpringApplication.run(ShortenerServer.class, args);
 
-        //GUARRADA: Starts checkerThread
+        //Starts checkerThread
         CheckerThread ct = (CheckerThread) ctx.getBean("checkerThread");
         ct.start();
 

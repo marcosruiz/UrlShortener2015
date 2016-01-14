@@ -1,6 +1,5 @@
 package urlshortener2015.eerieblack.services.shortener;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,8 +10,6 @@ import urlshortener2015.common.repository.ClickRepository;
 import urlshortener2015.common.repository.ClickRepositoryImpl;
 import urlshortener2015.common.repository.ShortURLRepository;
 import urlshortener2015.common.repository.ShortURLRepositoryImpl;
-import urlshortener2015.eerieblack.repository.UserRepository;
-import urlshortener2015.eerieblack.repository.UserRepositoryImpl;
 
 @Configuration
 @Profile("shortener")
@@ -31,5 +28,8 @@ public class PersistenceContext {
 	ClickRepository clickRepository() {
 		return new ClickRepositoryImpl(jdbc);
 	}
+
+	@Bean
+	ShortURLExtRepository shortURLExtRepository() {return new ShortURLExtRepositoryImpl(jdbc);}
 
 }
