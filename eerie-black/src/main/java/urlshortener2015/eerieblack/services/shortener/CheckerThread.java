@@ -31,28 +31,42 @@ public class CheckerThread extends Thread{
             }
             System.out.println("=========================");
             List<ShortURL> list = shortURLExtRepository.list();
-            for(ShortURL l: list){
-                System.out.println(l.getHash()+":"+ l.getTarget());
-                String url = l.getTarget();
+            for(ShortURL su: list){
+                System.out.println(su.getHash() + ":" + su.getTarget() + ":" + su.getMode());
+                String url = su.getTarget();
                 int myResponseCode = 0;
+                Integer actualMode = su.getMode();
+                Integer badMode = new Integer(50);
+                Integer goodMode = new Integer(307);
                 try {
                     URL urlTest = new URL(url);
                     HttpURLConnection http = (HttpURLConnection) urlTest.openConnection();
                     myResponseCode = http.getResponseCode();
                     if(200 <= myResponseCode && 300 > myResponseCode ){
                         //Bien
+                        if(actualMode.equals(badMode)){
+                            shortURLExtRepository.isReachable(su);
+                        }
                     }
                     else{
                         //Mal
+                        if(actualMode.equals(goodMode)){
+                            shortURLExtRepository.isNotReachable(su);
+                        }
                     }
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                     //Mal
+                    if(actualMode.equals(goodMode)){
+                        shortURLExtRepository.isNotReachable(su);
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
                     //Mal
-
+                    if(actualMode.equals(goodMode)){
+                        shortURLExtRepository.isNotReachable(su);
+                    }
                 }
             }
             System.out.println("=========================");
