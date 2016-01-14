@@ -7,9 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
+import urlshortener2015.eerieblack.auth.HttpBasicTokenManager;
 import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.services.users.UsersServiceWrapper;
 
@@ -55,14 +57,20 @@ public class UsersWebController {
 
     // Generate auth token
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> authUser(@RequestParam(value = "username", required = true) String name,
-                                      @RequestParam(value = "password", required = true) String pass,
-                                      HttpServletRequest request) {
-        logger.info("Requested auth token for name " + name);
-        String token = usersServiceWrapper.generateAuthToken(name, pass);
+    public ResponseEntity<?> authUser(HttpServletRequest request) {
+        String httpBasicToken = HttpBasicTokenManager.extractToken(request);
+        User user = HttpBasicTokenManager.validateToken(httpBasicToken);
+        logger.info("Requested auth token for name " + user.getUsername() + " - " + user.isPremium());
+        String token = usersServiceWrapper.generateAuthToken(user.getUsername(), user.getPassword());
+        user = BearerTokenManager.validateAuthToken(token);
         if (token != null) {
+            String response = "{"
+                + "\"username\":\"" + user.getUsername() + "\","
+                + "\"premium\":\"" + user.isPremium() + "\","
+                + "\"key\":\"" + token +"\"}";
             HttpHeaders h = new HttpHeaders();
-            return new ResponseEntity<>(token, h, HttpStatus.OK);
+            h.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>(response, h, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
@@ -74,14 +82,14 @@ public class UsersWebController {
         logger.info("User update request for user " + name + " (password: " + password + ")");
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null) {
             logger.info("Auth fail: No token found");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if (user == null || !user.getUsername().equalsIgnoreCase(name)) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -104,14 +112,14 @@ public class UsersWebController {
         logger.info("User update request for user " + name + " (premium: " + premiumParam + ")");
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null) {
             logger.info("Auth fail: No token found");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if (user == null || !user.getUsername().equalsIgnoreCase(name)) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -138,14 +146,14 @@ public class UsersWebController {
         logger.info("User delete request for user " + name);
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null) {
             logger.info("Auth fail: No token found");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if (user == null || !user.getUsername().equalsIgnoreCase(name)) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

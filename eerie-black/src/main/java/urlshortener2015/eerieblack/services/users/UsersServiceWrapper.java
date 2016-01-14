@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
 import urlshortener2015.eerieblack.domain.User;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class UsersServiceWrapper {
         // the response. We will use RestTemplate.exchange() instead.
         logger.info("Sending request to " + serviceUrl);
         HttpHeaders h = new HttpHeaders();
-        AuthTokenManager.setAuthToken(authToken, h);
+        BearerTokenManager.setAuthToken(authToken, h);
         HttpEntity<String> entity = new HttpEntity<>(password, h);
         ResponseEntity<User> response =
                 restTemplate.exchange(serviceUrl + "/users/{name}/password", HttpMethod.PUT, entity, User.class, name);
@@ -90,7 +90,7 @@ public class UsersServiceWrapper {
         // the response. We will use RestTemplate.exchange() instead.
         logger.info("Sending request to " + serviceUrl);
         HttpHeaders h = new HttpHeaders();
-        AuthTokenManager.setAuthToken(authToken, h);
+        BearerTokenManager.setAuthToken(authToken, h);
         HttpEntity<String> entity = new HttpEntity<>(premium.toString(), h);
         ResponseEntity<User> response =
                 restTemplate.exchange(serviceUrl + "/users/{name}/premium", HttpMethod.PUT, entity, User.class, name);
@@ -104,7 +104,7 @@ public class UsersServiceWrapper {
         // the response. We will use RestTemplate.exchange() instead.
         logger.info("Sending request to " + serviceUrl);
         HttpHeaders h = new HttpHeaders();
-        AuthTokenManager.setAuthToken(authToken, h);
+        BearerTokenManager.setAuthToken(authToken, h);
         HttpEntity<String> entity = new HttpEntity<>(h);
         ResponseEntity<User> response =
                 restTemplate.exchange(serviceUrl + "/users/{name}", HttpMethod.DELETE, entity, User.class, name);

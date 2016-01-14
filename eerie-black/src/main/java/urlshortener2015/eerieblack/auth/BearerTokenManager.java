@@ -12,12 +12,12 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 
-public class AuthTokenManager {
+public class BearerTokenManager {
 
     private static String KEY_SECRET = "sup3r-s3cr3t-API-k3y"; // FIXME OMG
     private static int    TTL_MILLIS = 3600000; // 1h TTL
 
-    private static Logger logger = LoggerFactory.getLogger(AuthTokenManager.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(BearerTokenManager.class.getName());
 
     // JSON Web Token signing
     private static SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
