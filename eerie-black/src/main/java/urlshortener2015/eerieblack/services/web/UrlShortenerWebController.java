@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
 import urlshortener2015.eerieblack.auth.AuthTokenManager;
-import urlshortener2015.eerieblack.domain.SynonymServiceWrapper;
 import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.services.shortener.ShortenerServiceWrapper;
 
@@ -23,14 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @Profile("web")
-@ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener", "urlshortener2015.eerieblack.domain" }) // Añadir la ruta de todos los wrappers //METER EL MIOOOOOOOO
+@ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener", "urlshortener2015.eerieblack.services.web" }) // Añadir la ruta de todos los wrappers //METER EL MIOOOOOOOO
 public class UrlShortenerWebController extends UrlShortenerController {
 
     // JSON Web Token signing
@@ -42,10 +40,8 @@ public class UrlShortenerWebController extends UrlShortenerController {
     @Autowired
     ShortenerServiceWrapper shortenerServiceWrapper;
 
-
     @Autowired
-    SynonymServiceWrapper synonymServiceWrapper; //METER EL MIO -> METIDO
-
+    SynonymServiceWrapper synonymServiceWrapper;
 
 	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerWebController.class);
 
@@ -130,19 +126,17 @@ public class UrlShortenerWebController extends UrlShortenerController {
 
 
     //mi endpointtttt para esooo
-   /* @Autowired
-    SynonymServiceWrapper synonymServiceWrapper;*/
     @RequestMapping(value = "/Synonyms/{keyword}", method = RequestMethod.GET)
     public ResponseEntity<?> getSynonym(@PathVariable String keyword,
                                         HttpServletRequest request) {
 
         logger.info("aaaa"); //mesnaje par ael logger
 
-        //List<String> listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
-        Object listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
+        String listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
+        //Object listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
 
         //por ejemplo
-        return new ResponseEntity<>(listSynonyms.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(listSynonyms, HttpStatus.OK);
     }
 
 

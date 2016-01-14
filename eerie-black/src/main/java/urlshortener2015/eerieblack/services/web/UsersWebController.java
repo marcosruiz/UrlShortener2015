@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.eerieblack.auth.AuthTokenManager;
 import urlshortener2015.eerieblack.domain.User;
-import urlshortener2015.eerieblack.repository.UserRepository;
 import urlshortener2015.eerieblack.services.users.UsersServiceWrapper;
 
 import javax.servlet.http.HttpServletRequest;
