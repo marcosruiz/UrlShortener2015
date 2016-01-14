@@ -7,10 +7,11 @@ import urlshortener2015.eerieblack.services.web.WebServer;
 
 public class Main {
 
-    final static String WEB_SERVICE = "web";
-    final static String REGISTRATION_SERVICE = "registration";
-    final static String SHORTENER_SERVICE = "shortener";
-    final static String USERS_SERVICE = "users";
+    //We will have the following four Micro-Services
+    final static String WEB_SERVICE = "web";                    //
+    final static String REGISTRATION_SERVICE = "registration";  //Managing the registration of the micro Services in Eureka
+    final static String SHORTENER_SERVICE = "shortener";        //Managing the "shorting" of the URI and the Periodical check of reachability
+    final static String USERS_SERVICE = "users";                //Managing the Users (find, save, update, delete, list, validate, auth )
 
     public static void main(String[] args) throws Exception {
 
