@@ -115,5 +115,4 @@ public class ShortenerController extends UrlShortenerController {
         HttpHeaders h = new HttpHeaders();
         return new ResponseEntity<>(l, h, HttpStatus.OK);
     }
-
 }

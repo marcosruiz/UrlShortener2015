@@ -57,7 +57,13 @@ public class UrlShortenerWebController extends UrlShortenerController {
         ShortURL shortURL = shortenerServiceWrapper.getByHash(id);
         if (shortURL != null) {
             // If url has advertisement, change the target uri to our advertisement page
-            if (shortURL.getSponsor().equals("yes")) shortURL = interceptURIAndTarget(shortURL);
+            if (shortURL.getSponsor().equals("yes")){
+                shortURL = interceptURIAndTarget(shortURL);
+            }
+            Integer badMode = new Integer(50);
+            if(shortURL.getMode().equals(badMode)){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             return createSuccessfulRedirectToResponse(shortURL);
         }
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);

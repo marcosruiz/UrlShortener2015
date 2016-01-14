@@ -12,10 +12,15 @@ CREATE TABLE SHORTURL(
 	SPONSOR		VARCHAR(1024),				-- Sponsor URL
 	CREATED 	TIMESTAMP,					-- Creation date
 	OWNER		VARCHAR(255),				-- User id
-	MODE		INTEGER,					-- Redirect mode
+	MODE		INTEGER,					-- Redirect mode - 50: is not reachable
 	SAFE		BOOLEAN,						-- Safe target
 	IP			VARCHAR(20),				-- IP
 	COUNTRY		VARCHAR(50)					-- Country
+);
+
+CREATE TABLE NOT_REACHABLES(
+	HASH		VARCHAR(30) NOT NULL FOREIGN KEY REFERENCES SHORTURL(HASH),	-- Key
+	NOT_REACHABLE_SINCE TIMESTAMP -- Since the web is not reachable
 );
 
 -- Click
