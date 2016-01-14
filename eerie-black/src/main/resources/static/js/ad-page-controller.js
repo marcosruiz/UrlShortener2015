@@ -36,7 +36,7 @@ $(document).ready(function() {
             url: '/' + hash + '/realTarget',
             data: { key: token },
             success: function(msg) {
-                button.href = msg.target;
+                button.attr('href', msg.target);
                 button.html("Skip this ad");
                 button.removeClass("disabled");
             },
