@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
 import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.domain.SynonymServiceWrapper;
 import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.services.shortener.ShortenerServiceWrapper;
 
@@ -22,13 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @Profile("web")
-@ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener" }) // Añadir la ruta de todos los wrappers
+@ComponentScan(basePackages = { "urlshortener2015.common.repository", "urlshortener2015.eerieblack.services.shortener", "urlshortener2015.eerieblack.domain" }) // Añadir la ruta de todos los wrappers //METER EL MIOOOOOOOO
 public class UrlShortenerWebController extends UrlShortenerController {
 
     // JSON Web Token signing
@@ -40,10 +42,15 @@ public class UrlShortenerWebController extends UrlShortenerController {
     @Autowired
     ShortenerServiceWrapper shortenerServiceWrapper;
 
+
+    @Autowired
+    SynonymServiceWrapper synonymServiceWrapper; //METER EL MIO -> METIDO
+
+
 	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerWebController.class);
 
     @Override
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect).*}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}", method = RequestMethod.GET)
 	public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
 		logger.info("Requested redirection with hash " + id);
         // Get url from shortenerService instead of own database
@@ -87,7 +94,7 @@ public class UrlShortenerWebController extends UrlShortenerController {
 		}
 	}
 
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect).*}/key", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}/key", method = RequestMethod.GET)
 	public ResponseEntity<?> generateKey(@PathVariable String id, HttpServletRequest request) {
 		logger.info("Requested key from " + extractIP(request));
         String key = generateRealTargetKey(extractIP(request), id);
@@ -97,7 +104,7 @@ public class UrlShortenerWebController extends UrlShortenerController {
 		return new ResponseEntity<>(result, h, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect).*}/realTarget", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}/realTarget", method = RequestMethod.GET)
 	public ResponseEntity<?> getRealUri(@PathVariable String id,
                                         @RequestParam(value = "key", required = false) String key,
                                         HttpServletRequest request) {
@@ -111,7 +118,27 @@ public class UrlShortenerWebController extends UrlShortenerController {
                 return new ResponseEntity<>(shortURL, h, HttpStatus.CREATED);
             } else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
 	}
+
+
+    //mi endpointtttt para esooo
+   /* @Autowired
+    SynonymServiceWrapper synonymServiceWrapper;*/
+    @RequestMapping(value = "/Synonyms/{keyword}", method = RequestMethod.GET)
+    public ResponseEntity<?> getSynonym(@PathVariable String keyword,
+                                        HttpServletRequest request) {
+
+        logger.info("aaaa"); //mesnaje par ael logger
+
+        //List<String> listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
+        Object listSynonyms= synonymServiceWrapper.getSynonyms(keyword);
+
+        //por ejemplo
+        return new ResponseEntity<>(listSynonyms.toString(), HttpStatus.OK);
+    }
+
 
 
     /* HELPER METHODS */
@@ -161,8 +188,8 @@ public class UrlShortenerWebController extends UrlShortenerController {
         //Establish dates
         long time = System.currentTimeMillis();
         Date now = new Date(time);
-        Date activeAt = new Date(time + 5000); //Not active until 5 seconds later
-        Date expiresAt = new Date(time + 60000); //Not active after 60 seconds
+        Date activeAt = new Date(time + 5000);      //Not active until 5 seconds later
+        Date expiresAt = new Date(time + 60000);    //Not active after 60 seconds
 
         // Set JWT claims
         JwtBuilder builder = Jwts.builder()
