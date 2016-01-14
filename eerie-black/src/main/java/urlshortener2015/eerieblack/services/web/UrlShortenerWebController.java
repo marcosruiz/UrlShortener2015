@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
 import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.services.shortener.ShortenerServiceWrapper;
 
@@ -46,7 +46,7 @@ public class UrlShortenerWebController extends UrlShortenerController {
 	private static final Logger logger = LoggerFactory.getLogger(UrlShortenerWebController.class);
 
     @Override
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|users|login|Synonyms).*}", method = RequestMethod.GET)
 	public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
 		logger.info("Requested redirection with hash " + id);
         // Get url from shortenerService instead of own database
@@ -72,14 +72,14 @@ public class UrlShortenerWebController extends UrlShortenerController {
 		logger.info("Requested new short for uri " + url);
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null && sponsor != null && sponsor.equals("no")) {
             logger.info("Auth fail: No token found");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if ((user == null || !user.isPremium()) && sponsor != null && sponsor.equals("no")) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -96,17 +96,17 @@ public class UrlShortenerWebController extends UrlShortenerController {
 		}
 	}
 
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}/key", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|users|login|Synonyms).*}/key", method = RequestMethod.GET)
 	public ResponseEntity<?> generateKey(@PathVariable String id, HttpServletRequest request) {
 		logger.info("Requested key from " + extractIP(request));
         String key = generateRealTargetKey(extractIP(request), id);
         HttpHeaders h = new HttpHeaders();
-        String result = "{\"key\":\"" + key + "\"}";  // F*CK DA POLICE
-        h.setContentType(MediaType.APPLICATION_JSON); // THUG LIFE
+        String result = "{\"key\":\"" + key + "\"}";
+        h.setContentType(MediaType.APPLICATION_JSON);
 		return new ResponseEntity<>(result, h, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|Synonyms).*}/realTarget", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id:(?!link|index|ad-redirect|users|login|Synonyms).*}/realTarget", method = RequestMethod.GET)
 	public ResponseEntity<?> getRealUri(@PathVariable String id,
                                         @RequestParam(value = "key", required = false) String key,
                                         HttpServletRequest request) {

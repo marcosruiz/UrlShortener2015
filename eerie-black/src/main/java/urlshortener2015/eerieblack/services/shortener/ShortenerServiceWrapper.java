@@ -11,7 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import urlshortener2015.common.domain.ShortURL;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
 
 /** This class acts as a wrapper for the microservice URL-shortener. It will be used by other microservices */
 @Profile("web") //Currently, the only service that will use this is 'web'
@@ -45,7 +45,7 @@ public class ShortenerServiceWrapper {
         if (sponsor != null) data.add("sponsor", sponsor);
         if (brand != null) data.add("brand", brand);
         HttpHeaders h = new HttpHeaders();
-        if (token != null) AuthTokenManager.setAuthToken(token, h);
+        if (token != null) BearerTokenManager.setAuthToken(token, h);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(data, h);
         // Send request
         logger.info("Sending request to " + serviceUrl + ": url=" + url + ", sponsor=" + sponsor + ", brand=" + brand);

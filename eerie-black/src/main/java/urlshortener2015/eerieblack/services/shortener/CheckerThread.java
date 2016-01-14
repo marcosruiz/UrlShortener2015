@@ -1,5 +1,7 @@
 package urlshortener2015.eerieblack.services.shortener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,21 +20,25 @@ import java.util.List;
 @Scope("prototype")
 public class CheckerThread extends Thread{
 
+    private static final int CHECK_INTERVAL = 60; //CHECK INTERVAL IN SECONDS
+
     @Autowired
     protected ShortURLExtRepository shortURLExtRepository;
+
+    protected Logger logger = LoggerFactory.getLogger(CheckerThread.class.getName());
 
     @Override
     public void run() {
         while(true){
             try {
-                Thread.sleep(5000);
+                Thread.sleep(CHECK_INTERVAL * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("=========================");
+            //System.out.println("=========================");
             List<ShortURL> list = shortURLExtRepository.list();
             for(ShortURL su: list){
-                System.out.println(su.getHash() + ":" + su.getTarget() + ":" + su.getMode());
+                logger.info("URL STATUS: " + su.getHash() + ":" + su.getTarget() + ":" + su.getMode());
                 String url = su.getTarget();
                 int myResponseCode = 0;
                 Integer actualMode = su.getMode();
@@ -69,7 +75,7 @@ public class CheckerThread extends Thread{
                     }
                 }
             }
-            System.out.println("=========================");
+            //System.out.println("=========================");
         }
     }
 }
