@@ -62,6 +62,7 @@ public class UsersWebController {
         User user = HttpBasicTokenManager.validateToken(httpBasicToken);
         logger.info("Requested auth token for name " + user.getUsername() + " - " + user.isPremium());
         String token = usersServiceWrapper.generateAuthToken(user.getUsername(), user.getPassword());
+        user = BearerTokenManager.validateAuthToken(token);
         if (token != null) {
             String response = "{"
                 + "\"username\":\"" + user.getUsername() + "\","

@@ -12,7 +12,8 @@ $(document).ready(
                         'Authorization': 'Basic ' + btoa(username + ':' + password)
                     },
                     success : function(msg) {
-                        console.log("Success!");
+                        console.log(msg);
+                        window.alert(msg);
                         localStorage.setItem("bearerToken", msg.key);
                         localStorage.setItem("username", msg.username);
                         localStorage.setItem("premium", msg.premium);
@@ -30,7 +31,7 @@ $(document).ready(
                 event.preventDefault();
                 var username = $('#reg-user').val();
                 var password = $('#reg-password').val();
-                var premium = $('#reg-premium').val();
+                var premium = $('#reg-premium').is(':checked');
                 $.ajax({
                     type : "POST",
                     url : "/users",
@@ -40,6 +41,7 @@ $(document).ready(
                         "premium": premium
                     },
                     success : function(msg) {
+                        console.log(msg);
                         $("#reg-result").html(
                             "<div class='alert alert-success lead'>SUCCESS!</div>");
                     },

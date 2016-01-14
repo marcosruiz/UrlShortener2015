@@ -6,7 +6,7 @@ $(document).ready(
         var username = localStorage.getItem("username");
         var premium = localStorage.getItem("premium") == "true";
         if (premium) $("#premium-field").html(
-            "<div class='checkbox'><label><input type='checkbox' id='sponsor'> No ads!</label></div>");
+            "<div class='checkbox'><label><input type='checkbox' id='no-sponsor'> No ads!</label></div>");
         if (token) {
             $("#log-out-warn").html(
                 "You are logged in as " + username + ". <a href='#' onclick='logout()'>Log out</a>");
@@ -22,11 +22,10 @@ $(document).ready(
                     type : "POST",
                     url : "/link",
                     headers: header,
-                    // data : $(this).serialize(),
                     data : {
                         url: $("#url").val(),
                         brand: $("#brand").val(),
-                        sponsor: $("#sponsor").val() ? "no" : "yes"
+                        sponsor: $("#no-sponsor").is(':checked') ? "no" : "yes"
                     },
                     success : function(msg) {
                         $("#result").html(
