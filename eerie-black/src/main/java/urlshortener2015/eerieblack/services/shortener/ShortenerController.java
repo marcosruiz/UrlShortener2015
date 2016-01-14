@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener2015.common.domain.ShortURL;
 import urlshortener2015.common.web.UrlShortenerController;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
 import urlshortener2015.eerieblack.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,14 +46,14 @@ public class ShortenerController extends UrlShortenerController {
         logger.info("Requested new short for uri " + url);
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null && sponsor != null && sponsor.equals("no")) {
             logger.info("Auth fail: No token found");
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if ((user == null || !user.isPremium()) && sponsor != null && sponsor.equals("no")) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

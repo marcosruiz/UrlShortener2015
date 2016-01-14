@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>URL Shortener</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" />
+<script type="text/javascript" src="webjars/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript"
+	src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/login-page-controller.js">
+</script>
+</head>
+<body>
+	<div class="container-full">
+
+			<div class="col-sm-4 col-sm-offset-2">
+				<div class="well">
+					<form novalidate role="form" id="login">
+						<h3>Login</h3>
+						<div class="form-group">
+							<label for="log-user">User:</label>
+							<input type="text" class="form-control" id="log-user">
+						</div>
+						<div class="form-group">
+							<label for="log-password">Pass:</label>
+							<input type="password" class="form-control" id="log-password">
+						</div>
+						<button type="submit" class="btn btn-success">Enter</button>
+					</form>
+					<br>
+					<div id="log-result" ></div>
+				</div>
+			</div>
+            </div>
+
+			<div class="col-sm-4">
+				<div class="well">
+					<form id="signup">
+						<h3>Register</h3>
+						<div class="form-group">
+							<label for="reg-user">User:</label>
+							<input type="text" class="form-control" id="reg-user">
+						</div>
+						<div class="form-group">
+							<label for="reg-password">Password:</label>
+							<input type="password" class="form-control" id="reg-password">
+						</div>
+                        <div class="checkbox"><label><input type="checkbox" id="reg-premium" id="sponsor"> Premium</label></div>
+						<button type="submit" class="btn btn-success">Register</button>
+					</form>
+					<br>
+					<div id="reg-result" ></div>
+				</div>
+			</div>
+
+	</div>
+</body>
+</html>

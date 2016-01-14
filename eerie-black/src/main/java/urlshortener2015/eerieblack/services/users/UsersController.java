@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import urlshortener2015.eerieblack.auth.AuthTokenManager;
+import urlshortener2015.eerieblack.auth.BearerTokenManager;
 import urlshortener2015.eerieblack.domain.User;
 import urlshortener2015.eerieblack.repository.UserRepository;
 
@@ -63,7 +63,7 @@ public class UsersController {
         User user = userRepository.validate(new User(name, pass, false));
         if (user != null) {
             HttpHeaders h = new HttpHeaders();
-            String authToken = AuthTokenManager.generateAuthToken(user);
+            String authToken = BearerTokenManager.generateAuthToken(user);
             return new ResponseEntity<>(authToken, h, HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -152,14 +152,14 @@ public class UsersController {
     private static User authenticateRequest(HttpServletRequest request, String name) {
 
         // Get the token from request
-        String token = AuthTokenManager.extractAuthToken(request);
+        String token = BearerTokenManager.extractAuthToken(request);
         if (token == null) {
             logger.info("Auth fail: No token found");
             return null;
         }
 
         // Validate the token
-        User user = AuthTokenManager.validateAuthToken(token);
+        User user = BearerTokenManager.validateAuthToken(token);
         if (user == null || !user.getUsername().equalsIgnoreCase(name)) {
             logger.info("Auth fail: " + (user == null ? "invalid token" : "user not authorized"));
             return null;
