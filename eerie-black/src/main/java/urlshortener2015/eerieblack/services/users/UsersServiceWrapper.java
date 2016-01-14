@@ -32,7 +32,7 @@ public class UsersServiceWrapper {
         serviceUrl = "http://users-service";
     }
 
-    // GET users list
+    // GET users list           ///bdasbhasdbhdasbhbdhasbdhasbhdasdasdasdasdasdasdasdasdasdas
     @SuppressWarnings("unchecked")
     public List<User> getUsersList(Long limit, Long offset) {
         logger.info("Sending request to " + serviceUrl);
